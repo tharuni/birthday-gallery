@@ -6,19 +6,23 @@ const imageURL = ({image_id}, res) => `https://www.artic.edu/iiif/2/${image_id}/
 const query = '?query[bool][must][][term][classification_titles.keyword]=painting&query[bool][must][][term][is_public_domain]=true';
 const fields = '&fields=image_id,title,artist_title';
 const resolutions = {"low": 400, "mid": 843, "high": 1686};
+const images = require("../images/images.json").images.map((img,i)=>({...img, image_id:i}));
 
 module.exports = {
     fetchList: async function (from, count) {
         const url = searchURL + query + fields + `&from=${from}&size=${count}`;
         const json = await fetch(url).then(res => res.json());
-        return json.data.filter((d) => d.image_id);
+        return json.data.filter((d) => d.image_id) + images.slice(from, from + count);
     },
     fetchImage: async function (obj, advicedResolution) {
         const url = imageURL(obj, resolutions[advicedResolution]);
+        const url2 = "images/" + obj.file;
         const blob = await fetch(url).then(res => res.blob());
+        const blob2 = await fetch(url2).then(res => res.blob2());
         return {
             title: obj.title + " - " + obj.artist_title,
-            image: blob
+            image: blob,blob2
         };
     }
 };
+

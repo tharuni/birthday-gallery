@@ -1,6 +1,9 @@
 'use strict';
 
-const mapSize = 6; // Log2 of the grid size (keep the value between [1, 6])
+const placement = require("./placement");
+var seedrandom = require('seedrandom');
+seedrandom('hello.', { global: true });
+const mapSize = 1; // Log2 of the grid size (keep the value between [1, 6])
 const cellSize = 8; // Size of the rooms
 const mapHeight = 7; // Height of the walls
 const wallThickness = 0.25; // Wall thickness
@@ -136,12 +139,12 @@ function reorderPlacements(placements, r) {
         let xj = Math.floor((places[j][0][0] + places[j][1][0]) / 4 / r);
         let yj = Math.floor((places[j][0][1] + places[j][1][1]) / 4 / r);
         //console.log(i, j, xi, yi, xj, yj);
-        if (xi == xj && yi == yj) {
-            //console.log("converge");
-            //console.log(temp.slice(i - len, i + 1), temp.slice(j, j + len + 1));
-            merge(placements, places, i - len, i + 1, j, j + len + 1);
-            it = []; jt = []; len = 0;
-        } else {
+        // if (xi == xj && yi == yj) {
+        //     //console.log("converge");
+        //     //console.log(temp.slice(i - len, i + 1), temp.slice(j, j + len + 1));
+        //     merge(placements, places, i - len, i + 1, j, j + len + 1);
+        //     it = []; jt = []; len = 0;
+        // } else {
             //console.log("diverge");
             let findi = jt.findIndex(([x, y]) => x === xi && y === yi);
             let findj = it.findIndex(([x, y]) => x === xj && y === yj);
@@ -161,12 +164,13 @@ function reorderPlacements(placements, r) {
                 jt.push([xj, yj]);
                 len++;
             }
-        }
+        // }
         i++; j--;
-    }
+	}
+	placements.length = 10;
     //console.log(temp.slice(i - len, j + len + 1));
     placements.push(...places.slice(i - len, j + len + 1));
-    console.timeEnd('reorder placements');
+	console.timeEnd('reorder placements');
 	return placements;
 }
 
