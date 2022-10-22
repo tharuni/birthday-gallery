@@ -3,7 +3,7 @@
 const placement = require("./placement");
 var seedrandom = require('seedrandom');
 seedrandom('hello.', { global: true });
-const mapSize = 1; // Log2 of the grid size (keep the value between [1, 6])
+const mapSize = 2; // Log2 of the grid size (keep the value between [1, 6])
 const cellSize = 8; // Size of the rooms
 const mapHeight = 7; // Height of the walls
 const wallThickness = 0.25; // Wall thickness
